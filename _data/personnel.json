@@ -1,0 +1,22 @@
+{
+    "data":[
+        {
+            "NomPrenom":"NomPrenom", 
+            "CIN":"CIN", 
+            "NomFonction":"NomFonction", 
+            "TypePersonnel":"TypePersonnel", 
+            "DateEmbauche":"DateEmbauche", 
+            "Sexe":"Sexe", 
+            "Contact":"Contact", 
+            "Adresse":"Adresse", 
+            "EsTravail":"EsTravail", 
+            "Matrimoniale":"Matrimoniale", 
+            "Formation":"Formation", 
+            "Experiences":"Experiences", 
+            "Motif":"Motif", 
+            "DateLicence":"DateLicence", 
+            "idPointage":"idPointage", 
+            "initial":"initial"
+        }
+    ]
+}

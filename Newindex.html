@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta charset="utf-8" />
+    <title>TSIMISARAKA S.A.R.L - Admin v2.0</title>
+
+    <meta name="description" content="overview &amp; stats" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
+
+    <!-- bootstrap & fontawesome -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+    <link
+      rel="stylesheet"
+      href="assets/font-awesome/4.5.0/css/font-awesome.min.css"
+    />
+
+    <!-- page specific plugin styles -->
+    <link rel="stylesheet" href="assets/css/jquery-ui.min.css" />
+    <link rel="stylesheet" href="assets/css/bootstrap-datepicker3.min.css" />
+    <link rel="stylesheet" href="assets/css/ui.jqgrid.min.css" />
+
+    <!-- text fonts -->
+    <link rel="stylesheet" href="assets/css/fonts.googleapis.com.css" />
+
+    <!-- ace styles -->
+    <link
+      rel="stylesheet"
+      href="assets/css/ace.min.css"
+      class="ace-main-stylesheet"
+      id="main-ace-style"
+    />
+
+    <!--[if lte IE 9]>
+      <link
+        rel="stylesheet"
+        href="assets/css/ace-part2.min.css"
+        class="ace-main-stylesheet"
+      />
+    <![endif]-->
+    <link rel="stylesheet" href="assets/css/ace-skins.min.css" />
+    <link rel="stylesheet" href="assets/css/ace-rtl.min.css" />
+
+    <!--[if lte IE 9]>
+      <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
+    <![endif]-->
+
+    <!-- inline styles related to this page -->
+
+    <!-- ace settings handler -->
+    <script src="assets/js/ace-extra.min.js"></script>
+
+    <!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+
+    <!--[if lte IE 8]>
+      <script src="assets/js/html5shiv.min.js"></script>
+      <script src="assets/js/respond.min.js"></script>
+    <![endif]-->
+    <style>
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        padding: 10px 10px;
+
+        z-index: 1;
+      }
+      .dropdown:hover .dropdown-content {display: block;}
+
+    </style>
+  </head>
+
+  <body class="no-skin">
+	
+	<!---->
+    <div id="navbar" class="navbar navbar-default ace-save-state">
+      <!-- /.navbar-container -->
+    </div>
+	<!---->
+	
+	
+    <div class="main-container ace-save-state" id="main-container">
+      <script type="text/javascript">
+        try {
+          ace.settings.loadState("main-container");
+        } catch (e) {}
+      </script>
+
+      <div id="sidebar" class="sidebar responsive ace-save-state menu-min">
+        <script type="text/javascript">
+          try {
+            ace.settings.loadState("sidebar");
+          } catch (e) {}
+        </script>
+
+        <div class="sidebar-shortcuts" id="sidebar-shortcuts">
+          <!-- .sidebar-shortcuts-large -->
+
+          <!-- .sidebar-shortcuts-mini -->
+        </div>
+        <!-- /.sidebar-shortcuts -->
+
+        <ul class="nav nav-list">
+          <li class="active">
+            <a href="index.html">
+              <i class="menu-icon fa fa-home home-icon"></i>
+              <span class="menu-text"> Accueil </span>
+            </a>
+
+            <b class="arrow"></b>
+          </li>
+        </ul>
+        <!-- /.nav-list -->
+
+        <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+          <i
+            id="sidebar-toggle-icon"
+            class="ace-icon fa fa-angle-double-left ace-save-state"
+            data-icon1="ace-icon fa fa-angle-double-left"
+            data-icon2="ace-icon fa fa-angle-double-right"
+          ></i>
+        </div>
+      </div>
+
+      <div class="main-content">
+        <div class="main-content-inner">
+          <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+            <ul class="breadcrumb">
+              <li>
+                <i class="ace-icon fa fa-home home-icon"></i>
+                <a href="#">Accueil</a>
+              </li>
+              <li class="active"></li>
+            </ul>
+            <!-- /.breadcrumb -->
+
+            <div class="nav-search" id="nav-search">
+              <form class="form-search">
+                <span class="input-icon">
+                  <input
+                    type="text"
+                    placeholder="Search ..."
+                    class="nav-search-input"
+                    id="nav-search-input"
+                    autocomplete="off"
+                  />
+                  <i class="ace-icon fa fa-search nav-search-icon"></i>
+                </span>
+              </form>
+            </div>
+            <!-- /.nav-search -->
+          </div>
+
+          <div class="page-content">
+            
+            <div class="page-header">
+              <h1>
+                Accueil
+                <small>
+                  <i class="ace-icon fa fa-angle-double-right"></i>
+                  Pointage
+                </small>
+              </h1>
+            </div>
+            <!-- /.page-header -->
+
+            <div class="row" >
+              <div class="col-xs-12">
+                <!-- PAGE CONTENT BEGINS -->
+                <div class="alert alert-block alert-success">
+                  <button type="button" class="close" data-dismiss="alert">
+                    <i class="ace-icon fa fa-times"></i>
+                  </button>
+
+                  <i class="ace-icon fa fa-check green"></i>
+                </div>
+
+                <div class="row" data-repere="row-1">
+                  <div class="space-6"></div>
+
+                  <!-- w1 -->
+                  <div
+                    class="col-xs-12 col-sm-12 widget-container-col"
+                    id="widget-container-col-1"
+                  >
+                    <div class="widget-box" id="widget-box-1">
+                      <div class="widget-header">
+                        <h5 class="widget-title"> </h5><!-- titre liste personnel tab -->
+
+                        <div class="widget-toolbar">
+                          
+                          <!-- menuPointage -->
+                          <div class="widget-menu">
+                            <a
+                              href="#"
+                              data-action="settings"
+                              data-toggle="dropdown"
+                            >
+                              <i class="ace-icon fa fa-bars"></i>
+                            </a>
+
+                            <ul
+                              class="dropdown-menu dropdown-menu-right dropdown-light-blue dropdown-caret dropdown-closer"
+                            >
+                              <li class="dropdown">
+                                <button class="btn btn-white btn-info btn-block" id="showPointagePanel">
+                                  <i class="ace-icon fa fa-heart bigger-120 blue"></i>
+                                  Piontage
+                                </button>
+                                
+                              </li>
+                            </ul>
+                          </div>
+                          <!-- menuPointage -->
+
+                          <!-- menuPersonnel -->
+                          <div class="widget-menu">
+                            <a
+                              href="#"
+                              data-action="settings"
+                              data-toggle="dropdown"
+                            >
+                              <i class="ace-icon fa fa-users bigger-110"></i>
+                            </a>
+
+                            <ul
+                              class="dropdown-menu dropdown-menu-right dropdown-light-blue dropdown-caret dropdown-closer"
+                            >
+                              <li class="dropdown">
+                                <button class="btn btn-white btn-info btn-block" id="actualiserListPersonnels">
+                                  <i class="ace-icon glyphicon glyphicon-refresh bigger-120 blue"></i>
+                                  Actualiser
+                                </button>
+                                
+                              </li>
+
+                              
+                            </ul>
+                          </div>
+                          <!-- menuPersonnel -->
+
+                          <a href="#" data-action="fullscreen" class="orange2">
+                            <i class="ace-icon fa fa-expand"></i>
+                          </a>
+
+                          <a href="#" data-action="reload">
+                            <i class="ace-icon fa fa-refresh"></i>
+                          </a>
+
+                          <a href="#" data-action="collapse">
+                            <i class="ace-icon fa fa-chevron-up"></i>
+                          </a>
+
+                          <!-- <a href="#" data-action="close">
+														<i class="ace-icon fa fa-times"></i>
+													</a> -->
+                        </div>
+                      </div>
+
+                      <div class="widget-body">
+                        <div class="widget-main" data-repere="personnel_container">
+                          <!-- <p class="alert alert-info">
+														Nunc aliquam enim ut arcu aliquet adipiscing. Fusce dignissim volutpat justo non consectetur. Nulla fringilla eleifend consectetur.
+													</p>
+													<p class="alert alert-success">
+														Raw denim you probably haven't heard of them jean shorts Austin.
+													</p> -->
+                          <table id="grid-personnel"></table>
+                          <div id="pager-personnel"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- w1 -->
+
+                  <div class="vspace-12-sm"></div>
+                </div>
+                <!-- /.row -->
+
+                <div class="hr hr32 hr-dotted"></div>
+
+                <!-- PAGE CONTENT ENDS -->
+              </div>
+              <!-- /.col -->
+            </div>
+            <!-- /.row -->
+          </div>
+          <!-- /.page-content -->
+        </div>
+      </div>
+      <!-- /.main-content -->
+
+      <div class="footer">
+        <div class="footer-inner">
+          <div class="footer-content">TSIMISARAKA S.A.R.L</div>
+        </div>
+      </div>
+
+      <a
+        href="#"
+        id="btn-scroll-up"
+        class="btn-scroll-up btn btn-sm btn-inverse"
+      >
+        <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+      </a>
+    </div>
+    <!-- /.main-container -->
+
+    <!-- basic scripts -->
+
+    <!--[if !IE]> -->
+    <script src="assets/js/jquery-2.1.4.min.js"></script>
+
+    <!-- <![endif]-->
+
+    <!--[if IE]>
+      <script src="assets/js/jquery-1.11.3.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      if ("ontouchstart" in document.documentElement)
+        document.write(
+          "<script src='assets/js/jquery.mobile.custom.min.js'>" +
+            "<" +
+            "/script>"
+        );
+    </script>
+    <script src="assets/js/bootstrap.min.js"></script>
+
+    <!-- page specific plugin scripts -->
+
+    <!--[if lte IE 8]>
+      <script src="assets/js/excanvas.min.js"></script>
+    <![endif]-->
+    <script src="assets/js/jquery-ui.custom.min.js"></script>
+    <script src="assets/js/jquery.ui.touch-punch.min.js"></script>
+	<script src="assets/js/jquery.ui.monthpicker.js"></script>
+	<script src="assets/js/bootbox.js"></script>
+    <script src="assets/js/jquery.easypiechart.min.js"></script>
+    <script src="assets/js/jquery.sparkline.index.min.js"></script>
+    <script src="assets/js/jquery.flot.min.js"></script>
+    <script src="assets/js/jquery.flot.pie.min.js"></script>
+    <script src="assets/js/jquery.flot.resize.min.js"></script>
+	
+	<!-- page specific plugin scripts -->
+		<script src="assets/js/jquery-ui.min.js"></script>
+		<script src="assets/js/jquery.ui.touch-punch.min.js"></script>
+
+    <!-- page specific plugin scripts -->
+    <script src="assets/js/bootstrap-datepicker.min.js"></script>
+    <script src="assets/js/jquery.jqGrid.min.js"></script>
+    <script src="assets/js/grid.locale-en.js"></script>
+
+    <!-- ace scripts -->
+    <script src="assets/js/ace-elements.min.js"></script>
+    <script src="assets/js/ace.min.js"></script>
+
+    <!-- inline scripts related to this page -->
+    <script type="text/javascript">
+      jQuery(function ($) {
+	  //override dialog's title function to allow for HTML titles
+				$.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+					_title: function(title) {
+						var $title = this.options.title || '&nbsp;'
+						if( ("title_html" in this.options) && this.options.title_html == true )
+							title.html($title);
+						else title.text($title);
+					}
+				}));
+   
+        //pie chart tooltip example
+        var $tooltip = $(
+          "<div class='tooltip top in'><div class='tooltip-inner'></div></div>"
+        )
+          .hide()
+          .appendTo("body");
+        var previousPoint = null;
+        /////////////////////////////////////
+        $(document).one("ajaxloadstart.page", function (e) {
+          $tooltip.remove();
+        });
+
+        $(".dialogs,.comments").ace_scroll({
+          size: 300,
+        });
+      });
+    </script>
+	<script src="js/Mywidget.js"></script>
+    <script src="js/paiePersonnel.js"></script>
+	<script src="js/detailPtgeByJrs.cls.js"></script>
+	<script src="js/pointagePersonnel.js"></script>
+    <script src="js/personnel.js"></script>
+    <script src="js/MyonLoad.js"></script>
+  </body>
+</html>

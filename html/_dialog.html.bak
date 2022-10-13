@@ -1,0 +1,12 @@
+<div id="dialog-confirm" >
+	<div class="alert alert-info bigger-110">
+		These items will be permanently deleted and cannot be recovered.
+	</div>
+
+	<div class="space-6"></div>
+
+	<p class="bigger-110 bolder center grey">
+		<i class="ace-icon fa fa-hand-o-right blue bigger-120"></i>
+		Are you sure?
+	</p>
+</div><!-- #dialog-confirm -->

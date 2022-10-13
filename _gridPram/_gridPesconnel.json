@@ -1,0 +1,74 @@
+{
+    //direction: "rtl",
+
+    //subgrid options
+    subGrid: true,
+    //subGridModel: [{ name : ['No','Item Name','Qty'], width : [55,200,80] }],
+    //datatype: "xml",
+    subGridOptions: {
+      plusicon: 'ace-icon fa fa-plus center bigger-110 blue',
+      minusicon: 'ace-icon fa fa-minus center bigger-110 blue',
+      openicon: 'ace-icon fa fa-chevron-right center orange',
+    },
+    //for this example we are using local data
+    subGridRowExpanded: function (subgridDivId, rowId) {
+      var subgridTableId = subgridDivId + '_t';
+      $ ('#' + subgridDivId).html (
+        "<table id='" + subgridTableId + "'></table>"
+      );
+      $ ('#' + subgridTableId).jqGrid ({
+        datatype: 'local',
+        data: subgrid_data,
+        colNames: ['No', 'Item Name', 'Qty'],
+        colModel: [
+          {name: 'id', width: 50},
+          {name: 'name', width: 150},
+          {name: 'qty', width: 50},
+        ],
+      });
+    },
+
+    //data: grid_data,
+    datatype: 'local',
+    //height: 250,
+    colNames: personnel.colNames,
+    colModel: personnel.colModel,
+    width:'auto',
+    viewrecords: true,
+    rowNum: 10,
+    rowList: [10, 20, 30],
+    pager: pager_selector,
+    altRows: true,
+
+    toppager: true,
+
+    multiselect: true,
+    //multikey: "ctrlKey",
+    multiboxonly: true,
+
+    loadComplete: function () {
+      var table = this;
+      setTimeout (function () {
+        styleCheckbox (table);
+
+        updateActionIcons (table);
+        updatePagerIcons (table);
+        enableTooltips (table);
+      
+      }, 0);
+    },
+
+    //editurl: './dummy.php', //nothing is saved
+    caption: 'Liste du paiePersonnel',
+    
+    /*autowidth: true,
+    grouping:true, 
+    groupingView : { 
+         groupField : ['name'],
+         groupDataSorted : true,
+         plusicon : 'fa fa-chevron-down bigger-110',
+         minusicon : 'fa fa-chevron-up bigger-110'
+    },
+    caption: "Grouping"
+    */
+  }
