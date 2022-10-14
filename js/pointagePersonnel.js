@@ -6,7 +6,7 @@ var fonc={
 		d['y']=d[1];
 		return d;
 	},
-	preActualisePtgeMonth:()=>{		
+	preActualisePtgeMonth:()=>{	
 		let _d=_dialog._confirm;
 			_d._setDetails("Acceder au donnée secondaire, prendra plus de temps que prévu", "Voulez vous porsuivre?");
 			$(_d._selector).dialog({
@@ -74,7 +74,8 @@ var fonc={
 	}
 }//end fonc
 /*<span class='label label-success arrowed'>Success</span>*/
-class fragmentationProgressMan{
+class fragmentationProgressMan{ 
+	// juste pour la gestion des progress bar
 		constructor(_id){
 			this._id=_id;
 			this._s0='#'+this._id+' .clearfix span.pull-right';
@@ -147,6 +148,7 @@ class fragmentationTraite{
 	}
 	_stop(){
 		this._free=true;
+		fonc.getPointageMonthDb();
 		this._dpp._clear();
 		//console.log('done');
 	}
@@ -187,7 +189,7 @@ var pointage_personnel={
 		$(_mSelector).monthpicker({
 			showOn:'focus',
 			onSelect:(e)=>{
-				console.log(e);
+				//console.log(e);
 				$('#widgetPointage .widget-box .widget-header h5.widget-title').text(e);
 				pointage_personnel._month=e;
 				pointage_personnel._checkMonthRecap();

@@ -24,13 +24,10 @@ $ ($ => {
   $(".dialogs,.comments").ace_scroll({
     size: 300,
   });
-  //   personnel._gridInit();
-  //   personnel._barMenu._init();
-  //   personnel._loadData();
-	// _dialog._confirm._load();//defined in __widget.js
-	//_dialog._confirm._init();
-  let mywd=new Widget0();
-  mywd.loadThenSet();
-  mywd.loadThenSet();
-  mywd.loadThenSet();
+    personnel._gridInit();
+    personnel._barMenu._init();
+    personnel._loadData();
+	_dialog._confirm._load();//defined in __widget.js
+	_dialog._confirm._init();
+
   }); //end on load)
