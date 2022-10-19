@@ -96,7 +96,7 @@ class calculRefTime{
 	constructor(){
 		this.op1=(ar,i)=>{
 			console.log(ar[i]);
-
+			return true;
 		};
 		this.op0=(ar,i)=>{
 			console.log(ar[i]);
@@ -164,14 +164,16 @@ class _parcours{
 			//console.log(this.id_enfant_parcour);
 			this.uptdrender('warning',this._ar);
 			this._curentI=0;
-			this._manage();
+			//this._manage();//fonctionnel mais j'ai changer vers subtask
+			this.subtask.prestart();
+
 		};
 		this._getNext=()=>{
 			let ar=this._ar;
 			this._curentI++;
 			let i=this._curentI;
 			if(i<ar.length){
-				this._manage();
+				this.subtask.prestart();
 			}else{
 				this._end();
 			}
@@ -199,10 +201,74 @@ class _parcours{
 			alert('done!');
 		}
 		this.subtask={
-			prestart:()=>{
-				let ar=[1,2,3,4,5,6,7,8,9,10];
-				// ajout de l'intercafe
+			_renderWarning:()=>{
+				let _color='warning';
+				let c=this.id_encPple;
+				let s='#'+c+' .'+_color;
+				let badge_s=s+' a span.badge-'+_color;
+				let liHeader_s=s+' ul li.dropdown-header';
+				let i=this._curentI;
+				let l=this._ar.length;
+				let v='subtask0';
+				let _liSklt = '<li class="dropdown-hover" id="' + v + '"><a href="#"><div class="clearfix"><span class="pull-left">test</span><span class="pull-right">0%</span></div><div class="progress progress-mini progress-striped active pos-rel " style="width:100%;" data-percent="0%"><div class="progress-bar progress-bar-danger" style="width:0%"></div></div></a></li>';
+				let _str = '<li class="dropdown-header">'+(i+1)+'/'+l+'</li>';
+				$(s+ " ul").html(_str + _liSklt);
+				this.subtask._start();
+				//console.log('test');
+			},
+			_updateRWarning:(label,percent)=>{
+				let s='#subtask0';
+				let p=percent+"%";
+				let l1Selector=s+" .clearfix span.pull-left";
+				let l2Selector=s+" .clearfix span.pull-right";
+				let envPbSelector=s+" .progress";
+				let cntPbSelector=s+" .progress .progress-bar";
+				$(l1Selector).text(label);
+				$(l2Selector).text(p);
+				$(envPbSelector).attr('data-percent',p);
+				$(cntPbSelector).css('width',p);
 
+			},
+			prestart:()=>{
+				this.subtask._ar=[1,2,3,4,5,6,7,8,9,10];
+				this.subtask._renderWarning();
+			},
+			_start:()=>{
+				this.subtask._curentI=0;
+				this.subtask._manage();
+			},
+			_manage:()=>{
+				let ar=this.subtask._ar;
+				let i=this.subtask._curentI;
+				let label=ar[i];
+				let percent=100*(i+1)/ar.length;
+				this.subtask._updateRWarning(label,percent);
+				let er=this.enfantOp(ar,i);
+					if(er){
+						this.subtask._getNext();
+					}else{
+						this.subtask._abord();
+					}
+			},
+			_getNext:()=>{
+				let ar=this.subtask._ar;
+				this.subtask._curentI++;
+				let i=this.subtask._curentI;
+				if(i<ar.length){
+					setTimeout(() => {
+						this.subtask._manage();
+					}, 100);
+				}else{
+					this.subtask._end();
+				}
+			},
+			_abord:()=>{
+				this.subtask._end();
+			},
+			_end:()=>{
+				setTimeout(() => {
+					this._setSucces();
+				}, 100);
 			}
 		}
 	}
