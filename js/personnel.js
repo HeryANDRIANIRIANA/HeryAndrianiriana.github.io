@@ -15,6 +15,8 @@ class _cPersonnel{
 var personnel={
 grid_selector:'#grid-personnel',
 pager_selector:'#pager-personnel',
+_data:{},
+_dataAsList:'',
 _init:()=>{
     
 },
@@ -34,11 +36,11 @@ _barMenu:{
 	  });
 	}
 },
-colNames:['NomPrenom', 'CIN', 'NomFonction', 'TypePersonnel', 'DateEmbauche', 'Sexe', 'Contact', 'Adresse', 'EsTravail', 'Matrimoniale', 'Formation', 'Experiences', 'Motif', 'DateLicence', 'idPointage', 'initial'],
+colNames:['NomPrenom', 'CIN', 'NomFonction', 'TypePersonnel', 'DateEmbauche', 'Sexe', 'Contact', 'Adresse', 'EsTravail', 'Matrimoniale', 'Formation', 'Experiences', 'Motif', 'DateLicence', 'idPointage', 'initial','SB_Mois','SB_Jours','SB_Heure'],
 _gridInit:()=>{
 let cm0=globalGrid.createColModel(personnel.colNames);
 //hideBydefault
-let defHidedCols=['TypePersonnel', 'DateEmbauche', 'Sexe', 'Contact', 'Adresse', 'EsTravail', 'Matrimoniale', 'Formation', 'Experiences', 'Motif', 'DateLicence', 'idPointage','initial'];
+let defHidedCols=['TypePersonnel', 'DateEmbauche', 'Sexe', 'Contact', 'Adresse', 'EsTravail', 'Matrimoniale', 'Formation', 'Experiences', 'Motif', 'DateLicence', 'idPointage','initial','SB_Mois','SB_Jours','SB_Heure'];
 cm1=globalGrid.hideDefaultHidden(cm0,defHidedCols);
 //hideBydefault
 //froseByDefalut
@@ -261,6 +263,7 @@ _loadData:()=>{
 	}).done((msg)=>{
 		let grid_selector=personnel.grid_selector;
 		let d=msg.data;
+    personnel._data=d;
 		let _l0=new _cPersonnel(d);
 		personnel._cPersonnel0=_l0.convertTOIdPointageRef();
 	$(grid_selector).jqGrid('setGridParam',{data:d}).trigger('reloadGrid');
@@ -269,6 +272,28 @@ _loadData:()=>{
 	});
 	/**/
 },//end loadData
+
+_loadDataFromDb:(_chalenge='forList')=>{//loading data without updating the grid
+  //console.log('go');
+  $.ajax({
+		method:'GET',
+		url:'_data/d0.json',
+		dataType:'json'
+	}).done((msg)=>{
+		let grid_selector=personnel.grid_selector;
+		let d=msg.data;
+    personnel._data=d;
+    if(_chalenge=='forList'){
+      personnel._formatDataForList();
+    }
+	//	let _l0=new _cPersonnel(d);
+		//personnel._cPersonnel0=_l0.convertTOIdPointageRef();
+//	$(grid_selector).jqGrid('setGridParam',{data:d}).trigger('reloadGrid');
+	}).fail(()=>{
+		alert('fail');
+	});
+	/**/
+},
 
 _updateDBSecondaire:()=>{
   $.ajax({
@@ -283,6 +308,27 @@ _updateDBSecondaire:()=>{
   }).fail(()=>{
   alert('Ceci est une version demo!')
   });
+},
+
+_formatDataForList:()=>{
+  //console.log(personnel._data);
+  //value:"FE:FedEx;IN:InTime;TN:TNT;AR:ARAMEX"
+  let s='';
+  let i=0;
+  $.each(personnel._data,(k,v)=>{
+    //console.log(v)
+    if(i==0){
+      s+=v.CIN+'-'+v.SB_Heure+':'+v.NomPrenom;
+      //s+=v.SB_Heure;
+    }else{
+      s+=';'+v.CIN+'-'+v.SB_Heure+':'+v.NomPrenom;
+     //s+=';'+v.SB_Heure;
+    };
+    i++;
+  });
+  personnel._dataAsList=s;
+//  console.log(personnel._dataAsList);
+  return s;
 }
 
 }

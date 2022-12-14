@@ -20,6 +20,7 @@
 
     <!-- page specific plugin styles -->
     <link rel="stylesheet" href="assets/css/jquery-ui.min.css" />
+    <link rel="stylesheet" href="assets/css/daterangepicker.min.css" />
     <link rel="stylesheet" href="assets/css/bootstrap-datepicker3.min.css" />
     <link rel="stylesheet" href="assets/css/ui.jqgrid.min.css" />
 
@@ -179,7 +180,7 @@
 
                   <i class="ace-icon fa fa-check green"></i>
                 </div>
-
+                <div class="row" data-repere="row-2"></div>
                 <div class="row" data-repere="row-1">
                   <div class="space-6"></div>
 
@@ -272,8 +273,13 @@
 													</p> -->
                           <table id="grid-personnel"></table>
                           <div id="pager-personnel"></div>
+                          <div class="pointageOperation">
+                            <input type="text" name="comm" id="comm"><div class="log">test</div>
+                          </div>
                         </div>
+                        
                       </div>
+
                     </div>
                   </div>
                   <!-- w1 -->
@@ -294,7 +300,7 @@
         </div>
       </div>
       <!-- /.main-content -->
-
+      <div class="popDial0 hide" title='Personnels liste'><table id='grid-P0'></table><div id='pager-P0'></div></div>
       <div class="footer">
         <div class="footer-inner">
           <div class="footer-content">TSIMISARAKA S.A.R.L</div>
@@ -354,6 +360,13 @@
     <script src="assets/js/bootstrap-datepicker.min.js"></script>
     <script src="assets/js/jquery.jqGrid.min.js"></script>
     <script src="assets/js/grid.locale-en.js"></script>
+    
+    <!-- dateRaangePisker -->
+    <script src="assets/js/moment.min.js"></script>
+    <script src="assets/js/daterangepicker.min.js"></script>
+
+    <!-- fpopgid -->
+    <script src="js/popgrid.js"></script>
 
     <!-- ace scripts -->
     <script src="assets/js/ace-elements.min.js"></script>
@@ -394,6 +407,7 @@
 	<script src="js/detailPtgeByJrs.cls.js"></script>
 	<script src="js/pointagePersonnel.js"></script>
     <script src="js/personnel.js"></script>
+    <script src="js/heureSupplementaire.js"></script>
     <script src="js/MyonLoad.js"></script>
   </body>
 </html>

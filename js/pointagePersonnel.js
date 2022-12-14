@@ -94,9 +94,50 @@ class calculRefTime{
 	// qui se produit sur uen liste de date s'lectionnné
 	// puis sur chaque date lire parcouir les pointage par utilisateur
 	constructor(){
+		pointage_personnel.arRefTime=[];
 		this.op1=(ar,i)=>{
-			console.log(ar[i]);
-			return true;
+			//each line of a daily pointage is ar;
+			let _ar=ar[i];
+			//console.log(_ar);
+			let _flag=_ar.flagMS;
+			let _dtMS=_ar.dateMSoir;
+			let _refT=parseInt(_ar.dateH)*60+parseInt(_ar.dateMin);
+
+			let _defRefT=0;
+			switch (_flag) {
+				case "S":
+					_defRefT=840;
+					break;
+			
+				default:
+					_defRefT=420
+					break;
+			}
+			let bContinue=true;
+			console.log(_refT, pointage_personnel.arRefTime);
+			if(typeof(pointage_personnel.arRefTime[_dtMS])=='undefined'){
+				if(_defRefT>_refT){
+					pointage_personnel.arRefTime[_dtMS]=_defRefT;
+					bContinue=false;
+				}else{
+					pointage_personnel.arRefTime[_dtMS]=_refT;
+				}
+			}else{
+				if(pointage_personnel.arRefTime[_dtMS]>_refT){
+					pointage_personnel.arRefTime[_dtMS]=_refT;
+				}
+			}
+			// if(typeof(this.arRefTime[_dtMS])=='undefined'){
+			// 	if(typeof(_refT)=='undefined' || _refT<_defRefT){
+			// 		this.arRefTime[_dtMS]=_defRefT;
+			// 		bContinue=false;
+			// 	}else{
+			// 		this.arRefTime[_dtMS]=_refT;
+			// 	}
+			// }else{
+			// 	if(this.arRefTime[_dtMS]<_refT)this.arRefTime[_dtMS]=_refT;
+			// }
+			return bContinue;
 		};
 		this.op0=(ar,i)=>{
 			console.log(ar[i]);
@@ -114,7 +155,7 @@ class calculRefTime{
 				let p0={};
 				$.extend(p0,this.parcou);
 				
-				if($(p0.id_encPple).length==0){
+				if($('#'+p0.id_encPple).length==0){
 					p0._render._root();
 					p0._render._badge();
 				}
@@ -163,9 +204,13 @@ class _parcours{
 			//console.log(this);
 			//console.log(this.id_enfant_parcour);
 			this.uptdrender('warning',this._ar);
-			this._curentI=0;
+			this.uptdrender('danger',[]);
+			this.uptdrender('succes',[]);
 			//this._manage();//fonctionnel mais j'ai changer vers subtask
-			this.subtask.prestart();
+			setTimeout(() => {
+				this._curentI=0;
+				this.subtask.prestart();
+			}, 200);
 
 		};
 		this._getNext=()=>{
@@ -230,8 +275,27 @@ class _parcours{
 
 			},
 			prestart:()=>{
-				this.subtask._ar=[1,2,3,4,5,6,7,8,9,10];
-				this.subtask._renderWarning();
+				this.subtask._ar=[];
+				// geting details ptge
+				let _rowId=this._ar[this._curentI];
+				let _grd=pointage_personnel._grid_selector;
+				let _rowData=$(_grd).getRowData(_rowId);
+				//console.log(_rowData);
+				let _url='_data/'+_rowData._date+' '+_rowData.flagMS+'.json';
+				$.ajax({
+					method:'post',
+					url:_url
+				}).done((msg)=>{
+						this.subtask._ar=msg.data;
+					//console.log(msg);
+					setTimeout(() => {						
+						this.subtask._renderWarning();
+					}, 100);
+				}).fail(()=>{
+					this.subtask._ar=[];
+					this._setError();
+				});
+				
 			},
 			_start:()=>{
 				this.subtask._curentI=0;
@@ -240,7 +304,7 @@ class _parcours{
 			_manage:()=>{
 				let ar=this.subtask._ar;
 				let i=this.subtask._curentI;
-				let label=ar[i];
+				let label=ar[i].NomPrenom;
 				let percent=100*(i+1)/ar.length;
 				this.subtask._updateRWarning(label,percent);
 				let er=this.enfantOp(ar,i);
@@ -263,9 +327,11 @@ class _parcours{
 				}
 			},
 			_abord:()=>{
+				
 				this.subtask._end();
 			},
 			_end:()=>{
+				console.log(pointage_personnel.arRefTime);
 				setTimeout(() => {
 					this._setSucces();
 				}, 100);
@@ -654,5 +720,321 @@ var pointage_personnel = {
 	}else{
 		alert('pascientez ...');
 	}
+	}
+}
+var pointageAsObject={
+	currentId:0,
+	currenDate:'',
+	byDate:[],
+	refTimes:[],
+	currentLowPintageI:0,
+	currentALLPointage:[]
+}
+var calculCongee={
+	
+	t_statusCalculCongee:{},
+	_curentProcedure:'',
+	_month:1,
+	_year:2021,
+	_timeRebours:()=>{
+		let _c=$('.pointageOperation .log ._timing');//
+		let _v=parseInt(_c.text());
+		_v--;
+		_c.text(_v);
+		if(calculCongee._waitingServer){
+			setTimeout(() => {	
+				calculCongee._timeRebours();
+			}, 1000);
+		}
+	},
+	_waitingServer:false,
+	_getStatusFromJson:(month=calculCongee._month,year=calculCongee._year)=>{
+		let _url="_data/"+year+"/"+month+"/status.json";
+		 $.get(_url,{},(m)=>{
+			calculCongee.t_statusCalculCongee=m.data;
+			 calculCongee.pannelCommandeLog._print(JSON.stringify(m));
+			 let _msg="next step shoud: getAllDates";
+			 calculCongee.pannelCommandeLog._print(_msg);
+		 });
+	},
+	_setMonth:(month=calculCongee._month,year=calculCongee._year)=>{
+		let _msg="recuperation des informations depuis la base...<span class='_timing'>60 </span>";
+		calculCongee.pannelCommandeLog._print(_msg);
+		calculCongee._waitingServer=true;
+		calculCongee._month=month;
+		calculCongee._year=year;
+		$.ajax({
+			url:'php/calculCongee.drv.php',
+			data:{oper:'setMonth',month:month,year:year}
+		}).done(
+			(m)=>{
+				calculCongee._waitingServer=false;
+				_msg="status: "+m;
+				//calculCongee.pannelCommandeLog._print(_msg);
+				calculCongee._getStatusFromJson();
+			}
+		).fail(
+			()=>{
+				calculCongee._waitingServer=false;
+				_msg="Fail to get Server";
+				calculCongee.pannelCommandeLog._print(_msg);
+			}
+		);
+		setTimeout(() => {
+			calculCongee._timeRebours();
+		}, 10);
+	},
+	_getAllDates:(month=calculCongee._month,year=calculCongee._year)=>{
+		// l'objectif serai de chercher tout les jours travailées, ce serais bien d'avoir une stat eu chaine de cractère
+		calculCongee._curentProcedure='getAllDates';
+		let _msg="recuperation des informations depuis la base...<span class='_timing'>60 </span>";
+		calculCongee.pannelCommandeLog._print(_msg);
+		calculCongee._waitingServer=true;
+		setTimeout(() => {
+			calculCongee._timeRebours();
+		}, 10);
+
+		$.ajax({
+			url:"php/calculCongee.drv.php",
+			data:{
+				oper:'getAllDates',
+				month:month,
+				year:year
+			}
+		}).done((m)=>{
+			
+			$.get("_data/"+calculCongee._year+"/"+calculCongee._month+"/"+"allDates.json",{},(m)=>{
+				calculCongee._waitingServer=false;
+				//console.log(calculCongee.t_statusCalculCongee[0].AllDtWithRefTime);
+				calculCongee.t_statusCalculCongee[0].AllDt=m;
+				let _msg=JSON.stringify(calculCongee.t_statusCalculCongee);
+				calculCongee.pannelCommandeLog._print(_msg);
+				_msg="next step shoud: _getPointageEachDt";
+				calculCongee.pannelCommandeLog._print(_msg);
+			});
+			
+		}).fail(()=>{
+			calculCongee._waitingServer=false;
+			alert('erreur réseau');
+		});
+	},
+	_getLowPointage:{
+		_start:()=>{
+			let _msg='All refTime got saving to db ....';
+				calculCongee.pannelCommandeLog._print(_msg);
+			pointageAsObject.refTimes=[];
+			pointageAsObject.currentId=0;
+			let _i=pointageAsObject.currentId;
+			let _allDt=calculCongee.t_statusCalculCongee[0].AllDt;
+			pointageAsObject.currenDate=_allDt[_i];
+			calculCongee._getLowPointage._exec();
+		},
+		_next:()=>{
+			let _i=pointageAsObject.currentId;
+			let _allDt=calculCongee.t_statusCalculCongee[0].AllDt;
+			let _l=_allDt.length;
+			_i++;
+			if(_i<_l){
+				pointageAsObject.currentId=_i;
+				pointageAsObject.currenDate=_allDt[_i];
+				setTimeout(() => {
+					calculCongee._getLowPointage._exec();
+				}, 10);
+			}else{
+				// console.log(pointageAsObject.refTimes);
+				let _msg='All refTime got saving to db ....';
+				calculCongee.pannelCommandeLog._print(_msg);
+				calculCongee._storeRefTime();
+				
+			}
+		},
+		_exec:()=>{
+			let _url='_data/'+calculCongee._year+'/'+calculCongee._month+'/'+pointageAsObject.currenDate+'.json';
+			$.get(_url,{},(m)=>{
+				// console.log(m);
+				let filtred=false;
+				filtred=calculCongee._getLowPointage._filter(m);
+				// console.log(filtred.answer);
+				if(filtred._status)calculCongee._getLowPointage._next();
+			});
+		},
+		_filter:(m)=>{
+			// get M or S
+			let _dt=pointageAsObject.currenDate;
+			let _MorS=_dt.split(' ')[1];
+			let _defRef=420;
+			switch(_MorS){
+				case 'S': _defRef=840;
+			}
+			let _ref=0;
+			let _i=0;
+			let _continue=true;
+			let _l=m.length;
+			let _dateH=0;
+			let _dateMin=0;
+			let _h=0;
+			do{
+				//console.log(m[_i]);
+				_dateH=parseInt(m[_i].dateH);
+				_dateMin=parseInt(m[_i].dateMin);
+				_h=_dateH*60+_dateMin;
+				if(_h<=_defRef){
+					_ref=_defRef;
+					_continue=false;
+				}else{
+					if(_ref==0){
+						_ref=_h;
+					}else{
+						_ref=(_h<_ref)?_h:_ref;
+					}
+					_i++;
+					_continue=(_i<_l)?true:false;
+				}
+				
+			}while(_continue);
+			let _r0=[];
+			_r0[_dt]=_ref;
+			pointageAsObject.refTimes[_dt]=_ref;
+			let r={_status:true, answer:_r0};
+			return r;
+		}
+	},
+	_getPointageEachDt:{
+		//allDt:calculCongee.t_statusCalculCongee[0].AllDt,
+		currentDtId:0,
+		_start:()=>{
+			let _o=calculCongee._getPointageEachDt;
+			pointageAsObject.currentId=0;
+			let _i=pointageAsObject.currentId;
+			let _allDt=calculCongee.t_statusCalculCongee[0].AllDt;
+			pointageAsObject.currenDate=_allDt[_i];
+			_o._exec();
+		},
+		_next:()=>{
+			let _allDt=calculCongee.t_statusCalculCongee[0].AllDt;
+			let _i=pointageAsObject.currentId;
+			_i++;
+			let _l=_allDt.length;
+			if(_i<_l){
+				let _allDt=calculCongee.t_statusCalculCongee[0].AllDt;				
+				pointageAsObject.currentId=_i;
+				let _dt=_allDt[_i];
+				pointageAsObject.currenDate=_dt;
+				setTimeout(() => {
+					let _o=calculCongee._getPointageEachDt;
+					_o._exec();
+				}, 10);
+			}else{
+			pointageAsObject.currentId=0;
+			calculCongee.pannelCommandeLog._print('_getPointageEachDt done line 832');
+			console.log(pointageAsObject.byDate);
+			calculCongee.pannelCommandeLog._print(pointageAsObject.byDate);
+			calculCongee.pannelCommandeLog._print('nextStep: _getLowPointage');
+			}
+		},
+		_exec:(_date=pointageAsObject.currenDate)=>{
+			let _o=calculCongee._getPointageEachDt;
+			calculCongee.pannelCommandeLog._print(_date);
+			pointageAsObject.byDate.push(_date);
+			$.ajax({
+				url:'php/calculCongee.drv.php',
+				data:{oper:'getAllPointageAt',_date:_date, month:calculCongee._month, year:calculCongee._year}
+			}).done(
+				(m)=>{
+					let _o=calculCongee._getPointageEachDt;
+					let _d=pointageAsObject.currenDate;
+					//pointageAsObject.byDate[_d]=m;
+					calculCongee.pannelCommandeLog._print(m);
+					_o._next();
+
+				}
+			).fail(()=>{console.error('fail')});
+			
+		}
+	},
+	_storeRefTime:()=>{
+		$.ajax({
+			url:'php/calculCongee.drv.php',
+			data:{
+				oper:'storeRefTime',
+				month:calculCongee._month,
+				year:calculCongee._year,
+				AllDtWithRefTime:pointageAsObject.refTimes
+			}
+		}).done((m)=>{
+			let _msg='Done. next step: _getPersonnelList';
+				calculCongee.pannelCommandeLog._print(_msg);
+		}).fail(()=>{console.error('network error');});
+	},
+	
+	pannelCommandeLog:{
+		_print:(msg)=>{
+			cible=$('.pointageOperation .log');
+			cible.prepend(msg+'</br>');
+		},
+		_resize:()=>{
+			comBoxSelector="#comm";
+			parent_column = $(comBoxSelector).closest('[class*="widget-main"]');
+			_w=parent_column.width()-10;
+			$(comBoxSelector).width(_w);
+		},
+		_availableTags:['setMonth', 'getStatus'],
+		_init:()=>{
+			comBoxSelector="#comm";
+			setTimeout(() => {
+				calculCongee.pannelCommandeLog._resize();
+			}, 10);
+			$(window).on('resize.jqGrid', function () {
+				calculCongee.pannelCommandeLog._resize();
+			  })
+			$(comBoxSelector).autocomplete({
+				source:calculCongee.pannelCommandeLog._availableTags
+			}).keydown((e)=>{
+				//calculCongee.pannelCommandeLog._print(e);
+				// console.log(e);
+				if(e.key=='Enter'){
+					let _o=e.currentTarget;
+					let _v=	e.currentTarget.value;
+					
+					$(_o).val('');
+					switch(_v){
+						case 'setMonth':
+							calculCongee._curentProcedure='setMonth';
+							let _answer="Procedure setMonth engagée, veuillez saisir Mois,Annee";
+							calculCongee.pannelCommandeLog._print(_answer);
+							break;
+						case 'getAllDates':
+							calculCongee._curentProcedure='getAllDates';
+							calculCongee._getAllDates();
+							break;
+						case '_getPointageEachDt':
+							calculCongee._getPointageEachDt._start();
+							break;
+						case '_getLowPointage':
+							calculCongee._getLowPointage._start();
+							break;
+						default:
+							switch (calculCongee._curentProcedure) {
+								case "setMonth":
+									let _m=_v.split(',')[0];
+									let _y=_v.split(',')[1];
+									calculCongee.pannelCommandeLog._print("demarrage procedure sur "+_m+"/"+_y);
+									calculCongee._setMonth(_m,_y);
+									break;
+							
+								default:
+									break;
+							}
+							break;
+					}
+					
+				}
+			});
+			//console.log(_w);
+			//resize to fit page size
+			// $(window).on('resize.jqGrid', function () {
+			//   $(grid_selector).jqGrid( 'setGridWidth', parent_column.width() );
+			//   })
+		}
 	}
 }

@@ -30,4 +30,9 @@ $ ($ => {
 	_dialog._confirm._load();//defined in __widget.js
 	_dialog._confirm._init();
 
+//initialisation de l'interface de calul  
+  calculCongee.pannelCommandeLog._init();
+ 
+  var heureSup=new _heureSup();
+  //console.log(heureSup);
   }); //end on load)
